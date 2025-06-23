@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package org.example;
+
+option java_multiple_files = true;
+option java_package = "org.example";
+
+message Person {
+    message Name {
+        string value = 1;
+    }
+    message Email {
+        string value = 1;
+    }
+    message PhoneNumber {
+        optional string number = 1;
+    }
+    int32 id = 1;
+    Name name = 2;
+    Email email = 3;
+    repeated PhoneNumber phones = 4;
+}
