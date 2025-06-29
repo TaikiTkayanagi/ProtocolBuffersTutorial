@@ -1,8 +1,15 @@
 package org.example;
 
+import org.apache.parquet.hadoop.ParquetFileWriter;
+import org.apache.parquet.hadoop.ParquetWriter;
+import org.apache.parquet.io.LocalOutputFile;
+import org.apache.parquet.proto.ProtoParquetWriter;
+import org.apache.parquet.proto.ProtoWriteSupport;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Path;
 
 /**
  * Hello world!
@@ -10,13 +17,13 @@ import java.io.IOException;
  */
 public class App 
 {
-    public static void main( String[] args )
-    {
+    public static void main( String[] args ) throws IOException {
         Person p = Person.newBuilder()
-                .setId(2)
-                .setName(Person.Name.newBuilder().setValue("1234"))
-                .setEmail(Person.Email.newBuilder().setValue("ttttttt").build())
-                .addPhones(Person.PhoneNumber.newBuilder().setNumber("123434").build())
+                .setId(500000000)
+                .setName(Person.Name.newBuilder().setValue("1234").setValue2("5678"))
+                .setTest1(10.0000000000)
+                .setTest2(1000000000)
+                .setTest3(10)
                 .build();
 
         try (FileOutputStream fos = new FileOutputStream("C:\\Users\\81803\\Desktop\\dns\\Person.bin")) {
@@ -26,6 +33,16 @@ public class App
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        Person.parseFrom()
+
+        Path path = Path.of("C:\\Users\\81803\\Desktop\\dns\\Person.parquet");
+        var outputPath = new LocalOutputFile(path);
+
+        try(ParquetWriter<Person> writer = ProtoParquetWriter.<Person>builder(outputPath)
+                .withMessage(Person.class)
+                .withWriteMode(ParquetFileWriter.Mode.OVERWRITE)
+                .config(ProtoWriteSupport.PB_SPECS_COMPLIANT_WRITE, "true")
+                .build()){
+            writer.write(p);
+        }
     }
 }

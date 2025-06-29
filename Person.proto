@@ -8,15 +8,11 @@ option java_package = "org.example";
 message Person {
     message Name {
         string value = 1;
-    }
-    message Email {
-        string value = 1;
-    }
-    message PhoneNumber {
-        optional string number = 1;
+        string value2 = 2;
     }
     int32 id = 1;
     Name name = 2;
-    Email email = 3;
-    repeated PhoneNumber phones = 4;
+    double test1 = 3;
+    uint32 test2 = 4;
+    float test3 = 5;
 }
