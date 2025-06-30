@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 /**
  * Hello world!
@@ -43,6 +44,13 @@ public class App
                 .config(ProtoWriteSupport.PB_SPECS_COMPLIANT_WRITE, "true")
                 .build()){
             writer.write(p);
+        }
+
+        int[] ids = new int[]{2,1,2,3};
+        String[] names = new String[]{"0","1","2","3"};
+        var persons = new Persons(ids, names);
+        try(var w = new PersonWriterBuilder(outputPath, new SchemaGenerator().generate()).withWriteMode(ParquetFileWriter.Mode.OVERWRITE).build()){
+            w.write(persons);
         }
     }
 }
